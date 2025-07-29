@@ -1,0 +1,204 @@
+{% comment %}
+  SMARTLOCKEG Custom Product Template
+  Enhanced template for smart lock products with security features
+  Author: youssefsaberr
+  Date: 2025-07-29
+{% endcomment %}
+
+{{ 'smartlock-custom.css' | asset_url | stylesheet_tag }}
+
+<div class="smartlock-hero fade-in">
+  <div class="container">
+    <h1>{{ product.title }}</h1>
+    <p>Advanced Smart Lock Technology for Modern Security</p>
+  </div>
+</div>
+
+<div class="container">
+  <div class="smartlock-product-wrap slide-up">
+    
+    <!-- Product Images Section -->
+    <div class="smartlock-media">
+      {% if product.images.size > 0 %}
+        <div class="smartlock-product-images">
+          <img src="{{ product.images.first | img_url: '800x800' }}" 
+               alt="{{ product.title }}" 
+               loading="lazy" 
+               class="main-product-image" />
+          
+          {% if product.images.size > 1 %}
+            <div class="product-thumbnails" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+              {% for image in product.images limit: 4 %}
+                <img src="{{ image | img_url: '150x150' }}" 
+                     alt="{{ product.title }}" 
+                     style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; cursor: pointer;"
+                     onclick="document.querySelector('.main-product-image').src = '{{ image | img_url: '800x800' }}'">
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+      
+      <!-- Security Badges -->
+      <div style="margin-top: 1.5rem;">
+        <div class="security-badge">IP65 Weather Resistant</div>
+        <div class="security-badge">256-bit Encryption</div>
+        <div class="security-badge">Tamper Alert</div>
+        <div class="security-badge">Smart Home Ready</div>
+      </div>
+    </div>
+    
+    <!-- Product Information Section -->
+    <div class="smartlock-info">
+      <h1 class="smartlock-title">{{ product.title }}</h1>
+      <div class="smartlock-price">{{ product.price | money }}</div>
+      
+      {% if product.description != blank %}
+        <div class="product-description" style="margin-bottom: 2rem; font-size: 1.1em; line-height: 1.6; color: #555;">
+          {{ product.description }}
+        </div>
+      {% endif %}
+
+      <!-- Unlocking Methods -->
+      <div style="margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem; color: #333;">Unlocking Methods</h3>
+        
+        <div class="unlock-method">
+          <div class="unlock-method-icon">📱</div>
+          <div>
+            <div class="unlock-method-title">Smartphone App</div>
+            <div class="unlock-method-description">Unlock remotely with our secure mobile app</div>
+          </div>
+        </div>
+        
+        <div class="unlock-method">
+          <div class="unlock-method-icon">🔢</div>
+          <div>
+            <div class="unlock-method-title">Digital Keypad</div>
+            <div class="unlock-method-description">Enter your personal access code</div>
+          </div>
+        </div>
+        
+        <div class="unlock-method">
+          <div class="unlock-method-icon">👆</div>
+          <div>
+            <div class="unlock-method-title">Biometric Scanner</div>
+            <div class="unlock-method-description">Fingerprint recognition technology</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Collapsible Information Sections -->
+      <details class="smartlock-accordion">
+        <summary>🔓 Unlocking Functions</summary>
+        <div class="content">
+          <div class="metafield-content">
+            {{ product.metafields.custom.unlocking_functions_content | default: "
+            <h3>Advanced Unlocking Capabilities</h3>
+            <ul>
+              <li>Smartphone app control with Bluetooth and WiFi</li>
+              <li>Biometric fingerprint recognition (up to 100 fingerprints)</li>
+              <li>Digital keypad with customizable codes</li>
+              <li>Physical key backup option</li>
+              <li>Voice control via Alexa and Google Assistant</li>
+              <li>Temporary access codes for guests</li>
+            </ul>
+            " }}
+          </div>
+        </div>
+      </details>
+
+      <details class="smartlock-accordion">
+        <summary>✨ Key Features</summary>
+        <div class="content">
+          <div class="metafield-content">
+            {{ product.metafields.custom.key_features_content | default: "
+            <h3>Smart Security Features</h3>
+            <ul>
+              <li>Real-time notifications and activity logs</li>
+              <li>Auto-lock functionality with timer settings</li>
+              <li>Weather-resistant design (IP65 rating)</li>
+              <li>Long-lasting battery (12+ months)</li>
+              <li>Tamper alerts and forced entry detection</li>
+              <li>Easy installation on most door types</li>
+            </ul>
+            " }}
+          </div>
+        </div>
+      </details>
+
+      <details class="smartlock-accordion">
+        <summary>📋 Technical Specifications</summary>
+        <div class="content">
+          <div class="metafield-content">
+            {{ product.metafields.custom.specs_content | default: "
+            <h3>Technical Details</h3>
+            <ul>
+              <li>Connectivity: Bluetooth 5.0, WiFi 2.4GHz</li>
+              <li>Power: 4x AA batteries (included)</li>
+              <li>Operating Temperature: -20°C to 60°C</li>
+              <li>Door Thickness: 35-55mm</li>
+              <li>Dimensions: 75mm x 165mm x 25mm</li>
+              <li>Weight: 850g</li>
+              <li>Warranty: 2 years manufacturer warranty</li>
+            </ul>
+            " }}
+          </div>
+        </div>
+      </details>
+
+      <!-- Add to Cart Section -->
+      {% form 'product', product %}
+        <div style="margin-top: 2rem;">
+          {% if product.available %}
+            <button type="submit" class="smartlock-add-to-cart">
+              🔒 Add to Cart - {{ product.price | money }}
+            </button>
+          {% else %}
+            <button class="smartlock-add-to-cart" disabled style="background: #6c757d;">
+              Out of Stock
+            </button>
+          {% endif %}
+        </div>
+      {% endform %}
+    </div>
+  </div>
+</div>
+
+<!-- Additional Product Information -->
+<div class="container" style="margin-top: 3rem;">
+  <div class="smartlock-grid">
+    <div class="text-center">
+      <div class="feature-icon">🏠</div>
+      <h4>Smart Home Integration</h4>
+      <p>Works with Alexa, Google Home, and most smart home systems</p>
+    </div>
+    
+    <div class="text-center">
+      <div class="feature-icon">🔋</div>
+      <h4>Long Battery Life</h4>
+      <p>12+ months of battery life with low battery alerts</p>
+    </div>
+    
+    <div class="text-center">
+      <div class="feature-icon">🌧️</div>
+      <h4>Weather Resistant</h4>
+      <p>IP65 rated for all weather conditions and outdoor use</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Simple JavaScript for enhanced functionality
+document.addEventListener('DOMContentLoaded', function() {
+  // Add smooth scrolling and animations
+  const accordions = document.querySelectorAll('.smartlock-accordion');
+  accordions.forEach(accordion => {
+    accordion.addEventListener('toggle', function() {
+      if (this.open) {
+        this.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  });
+});
+</script>
