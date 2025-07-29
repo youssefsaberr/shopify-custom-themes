@@ -1,0 +1,113 @@
+{% comment %}
+  Enhanced Product Info Section for SMARTLOCKEG
+  Displays product with collapsible sections for features, functions, and specs
+{% endcomment %}
+
+<style>
+.smartlock-product-wrap { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 2rem; 
+  margin: 2rem 0; 
+  max-width: 1200px; 
+  margin-left: auto; 
+  margin-right: auto; 
+}
+.smartlock-media { flex: 1 1 400px; }
+.smartlock-info { flex: 1 1 500px; }
+.smartlock-title { 
+  font-size: 2.5em; 
+  font-weight: 700; 
+  margin-bottom: 0.5em; 
+  color: #1a1a1a; 
+  line-height: 1.2;
+}
+.smartlock-price { 
+  color: #0066cc; 
+  font-size: 1.8em; 
+  margin-bottom: 1em; 
+  font-weight: 600; 
+}
+.smartlock-accordion { 
+  border: 1px solid #e0e0e0; 
+  border-radius: 12px; 
+  margin-bottom: 1rem; 
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.smartlock-accordion:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.smartlock-accordion summary { 
+  font-weight: 600; 
+  cursor: pointer; 
+  padding: 1.2em 1.5em; 
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); 
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 1.1em;
+  transition: all 0.3s ease;
+}
+.smartlock-accordion summary:hover { background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%); }
+.smartlock-accordion[open] summary { 
+  background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%); 
+  color: white; 
+}
+.smartlock-accordion .content { 
+  padding: 1.5em; 
+  line-height: 1.7; 
+  background: white;
+}
+.smartlock-media img { 
+  max-width: 100%; 
+  border-radius: 12px; 
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1); 
+}
+@media (max-width: 768px) {
+  .smartlock-product-wrap { flex-direction: column; margin: 1rem; }
+  .smartlock-title { font-size: 2em; }
+  .smartlock-price { font-size: 1.5em; }
+}
+</style>
+
+<div class="smartlock-product-wrap">
+  <div class="smartlock-media">
+    {% if product.images.size > 0 %}
+      <img src="{{ product.images.first | img_url: '800x800' }}" 
+           alt="{{ product.title }}" 
+           loading="lazy" />
+    {% endif %}
+  </div>
+  
+  <div class="smartlock-info">
+    <h1 class="smartlock-title">{{ product.title }}</h1>
+    <div class="smartlock-price">{{ product.price | money }}</div>
+    
+    {% if product.description != blank %}
+      <div style="margin-bottom: 2em; font-size: 1.1em; line-height: 1.6; color: #555;">
+        {{ product.description | truncate: 300 }}
+      </div>
+    {% endif %}
+
+    <details class="smartlock-accordion">
+      <summary>🔓 Unlocking Functions</summary>
+      <div class="content">
+        {{ product.metafields.custom.unlocking_functions_content | default: "Advanced unlocking mechanisms including biometric, keypad, and smartphone connectivity." }}
+      </div>
+    </details>
+
+    <details class="smartlock-accordion">
+      <summary>✨ Key Features</summary>
+      <div class="content">
+        {{ product.metafields.custom.key_features_content | default: "Smart home integration, weather resistance, long battery life, and tamper alerts." }}
+      </div>
+    </details>
+
+    <details class="smartlock-accordion">
+      <summary>📋 Technical Specifications</summary>
+      <div class="content">
+        {{ product.metafields.custom.specs_content | default: "Detailed technical specifications will be displayed here." }}
+      </div>
+    </details>
+  </div>
+</div>
