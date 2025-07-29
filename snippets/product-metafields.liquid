@@ -1,0 +1,189 @@
+{% comment %}
+  SMARTLOCKEG Product Metafields Snippet
+  Reusable component for displaying product metafields consistently
+  Usage: {% render 'product-metafields', product: product, section_type: 'features' %}
+  Author: youssefsaberr
+  Date: 2025-07-29
+{% endcomment %}
+
+{% assign metafield_content = nil %}
+{% assign icon = '📋' %}
+{% assign title = 'Information' %}
+
+{% case section_type %}
+  {% when 'functions' %}
+    {% assign metafield_content = product.metafields.custom.unlocking_functions_content %}
+    {% assign icon = '🔓' %}
+    {% assign title = 'Unlocking Functions' %}
+  {% when 'features' %}
+    {% assign metafield_content = product.metafields.custom.key_features_content %}
+    {% assign icon = '✨' %}
+    {% assign title = 'Key Features' %}
+  {% when 'specs' %}
+    {% assign metafield_content = product.metafields.custom.specs_content %}
+    {% assign icon = '📋' %}
+    {% assign title = 'Technical Specifications' %}
+  {% when 'installation' %}
+    {% assign metafield_content = product.metafields.custom.installation_guide %}
+    {% assign icon = '🔧' %}
+    {% assign title = 'Installation Guide' %}
+  {% when 'warranty' %}
+    {% assign metafield_content = product.metafields.custom.warranty_info %}
+    {% assign icon = '🛡️' %}
+    {% assign title = 'Warranty Information' %}
+  {% when 'compatibility' %}
+    {% assign metafield_content = product.metafields.custom.compatibility_info %}
+    {% assign icon = '🏠' %}
+    {% assign title = 'Smart Home Compatibility' %}
+{% endcase %}
+
+{% if metafield_content != blank %}
+  <div class="smartlock-metafield-section" style="margin-bottom: 1.5rem;">
+    {% if show_as_accordion %}
+      <details class="smartlock-accordion">
+        <summary>{{ icon }} {{ title }}</summary>
+        <div class="content">
+          <div class="metafield-content">
+            {{ metafield_content }}
+          </div>
+        </div>
+      </details>
+    {% else %}
+      <div class="metafield-card" style="border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.5rem; background: white;">
+        <h3 style="color: #0066cc; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.2em;">{{ icon }}</span>
+          {{ title }}
+        </h3>
+        <div class="metafield-content">
+          {{ metafield_content }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% comment %}
+  Fallback content for empty metafields
+{% endcomment %}
+{% unless metafield_content %}
+  {% if show_fallback %}
+    <div class="metafield-placeholder" style="background: #f8f9fa; border: 2px dashed #dee2e6; border-radius: 8px; padding: 2rem; text-align: center; color: #6c757d;">
+      <p>{{ icon }} <strong>{{ title }}</strong></p>
+      <p style="margin: 0; font-size: 0.9em;">Content will be added when metafield is configured</p>
+      <small style="font-family: monospace; background: #e9ecef; padding: 0.25rem 0.5rem; border-radius: 4px; margin-top: 0.5rem; display: inline-block;">
+        custom.{{ section_type }}_content
+      </small>
+    </div>
+  {% endif %}
+{% endunless %}
+
+<style>
+/* Metafield-specific styles */
+.metafield-content {
+  line-height: 1.6;
+}
+
+.metafield-content h1, 
+.metafield-content h2, 
+.metafield-content h3 {
+  color: #0066cc;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.metafield-content h1:first-child,
+.metafield-content h2:first-child,
+.metafield-content h3:first-child {
+  margin-top: 0;
+}
+
+.metafield-content ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.metafield-content li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.metafield-content li:last-child {
+  border-bottom: none;
+}
+
+.metafield-content li::before {
+  content: "✓";
+  color: #28a745;
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.metafield-content ol {
+  padding-left: 1.5rem;
+}
+
+.metafield-content ol li {
+  padding-left: 0.5rem;
+}
+
+.metafield-content ol li::before {
+  display: none;
+}
+
+.metafield-content p {
+  margin-bottom: 1rem;
+}
+
+.metafield-content strong {
+  color: #333;
+}
+
+.metafield-content code {
+  background: #f8f9fa;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.metafield-content blockquote {
+  border-left: 4px solid #0066cc;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .metafield-card {
+    padding: 1rem !important;
+  }
+  
+  .metafield-content h3 {
+    font-size: 1.1em;
+  }
+}
+</style>
+
+{% comment %}
+  Usage Examples:
+  
+  1. As accordion (default):
+  {% render 'product-metafields', product: product, section_type: 'features', show_as_accordion: true %}
+  
+  2. As card:
+  {% render 'product-metafields', product: product, section_type: 'specs', show_as_accordion: false %}
+  
+  3. With fallback content:
+  {% render 'product-metafields', product: product, section_type: 'warranty', show_fallback: true %}
+  
+  4. Multiple sections:
+  {% render 'product-metafields', product: product, section_type: 'functions', show_as_accordion: true %}
+  {% render 'product-metafields', product: product, section_type: 'features', show_as_accordion: true %}
+  {% render 'product-metafields', product: product, section_type: 'specs', show_as_accordion: true %}
+{% endcomment %}
